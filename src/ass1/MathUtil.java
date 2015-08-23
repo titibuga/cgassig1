@@ -90,8 +90,13 @@ public class MathUtil {
      * @return
      */
     public static double[][] translationMatrix(double[] v) {
+    	
 
-        return null;
+        return new double[][]{
+        	{1.0, 0.0, v[0]},
+        	{0.0, 1.0, v[1]},
+        	{0.0, 0.0, 1.0},
+        };
     }
 
     /**
@@ -101,9 +106,15 @@ public class MathUtil {
      * @return
      */
     public static double[][] rotationMatrix(double angle) {
-
-
-        return null;
+    	double a = Math.toRadians(MathUtil.normaliseAngle(angle));
+    	double sin = Math.sin(a);
+    	double cos = Math.cos(a);
+    	
+    	 return new double[][]{
+    	        	{cos, -sin, 0.0},
+    	        	{sin, cos, 0.0},
+    	        	{0.0, 0.0, 1.0},
+    	        };
     }
 
     /**
@@ -114,7 +125,11 @@ public class MathUtil {
      */
     public static double[][] scaleMatrix(double scale) {
 
-        return null;
+        return new double[][]{
+	        	{scale, 0.0, 0.0},
+	        	{0.0, scale, 0.0},
+	        	{0.0, 0.0, 1.0},
+	        };
     }
 
     
