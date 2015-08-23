@@ -250,7 +250,7 @@ public class GameObject {
     /**
      * Draw the object and all of its descendants recursively.
      * 
-     * TODO: Complete this method
+     * 
      * 
      * @param gl
      */
@@ -261,22 +261,76 @@ public class GameObject {
             return;
         }
 
-        // TODO: setting the model transform appropriately  
         // draw the object (Call drawSelf() to draw the object itself) 
         // and all its children recursively
+        
+        double[] myPos = this.getPosition();
+        
+        gl.glPushMatrix();
+	        gl.glTranslated(myPos[0],myPos[1],0);
+	        gl.glRotated(this.getRotation(),0,0,1);
+	        gl.glScaled(this.getScale(), this.getScale(), 1);
+	        this.drawSelf(gl);
+	        for( GameObject child : this.myChildren )
+	        	child.draw(gl);
+        gl.glPopMatrix();
        
         
+    }
+    
+    
+    private double[][] getModelViewMatrix()
+    {
+    	double[][] m;
+    	double[][] trans, rot, scale;
+    	GameObject parent = this.getParent();
+    	
+    	// If ROOT, load identity
+    	if(parent == null)
+    	{
+    		m = new double[3][3];
+    		m[0][0] = m[1][1] = m[2][2] = 1;
+    	}
+    	else
+    	{
+    		//Not root, so get parents modelView Matrix
+    		m = parent.getModelViewMatrix();    		
+    	}
+    	
+    	
+    	trans = MathUtil.translationMatrix(this.getPosition());
+    	rot = MathUtil.rotationMatrix(this.getRotation());
+    	scale = MathUtil.scaleMatrix(this.getScale());
+    	
+    	
+    	// Multiply m*trans*rot*scale =
+    	// = (m*trans)*(rot*scale)
+    	m = MathUtil.multiply(m, trans);
+    	rot = MathUtil.multiply(rot, scale);
+    	m = MathUtil.multiply(m, rot);
+    	
+    	
+    	
+    	return m;
     }
 
     /**
      * Compute the object's position in world coordinates
      * 
-     * TODO: Write this method
+     * 
      * 
      * @return a point in world coordinats in [x,y] form
      */
     public double[] getGlobalPosition() {
         double[] p = new double[2];
+        double[][] modelView = this.getModelViewMatrix();
+        
+        //We just need to take the last column of the matrix
+        
+        p[0] = modelView[0][2];
+        p[1] = modelView[1][2];
+        
+        
         return p; 
     }
 
@@ -289,18 +343,35 @@ public class GameObject {
      * normalized to the range (-180, 180) degrees. 
      */
     public double getGlobalRotation() {
-        return 0;
+    	double alpha; 
+    	GameObject parent;
+    	
+    	parent = this.getParent();
+    	
+    	if(parent == null) return this.getRotation();
+    	else
+    	{
+    		alpha = parent.getGlobalRotation() + this.getRotation();
+    		return MathUtil.normaliseAngle(alpha);
+    	}
+    	
     }
 
     /**
      * Compute the object's scale in global terms
      * 
-     * TODO: Write this method
+     * 
      * 
      * @return the global scale of the object 
      */
     public double getGlobalScale() {
-        return 1.0;
+    	GameObject parent = this.getParent();
+    	
+    	if(parent == null)
+    		return this.getScale();
+    	else
+    		return parent.getGlobalScale()*this.getScale();
+    	
     }
 
     /**
@@ -313,6 +384,40 @@ public class GameObject {
      * @param parent
      */
     public void setParent(GameObject parent) {
+    	
+    	double[] globalPos = this.getGlobalPosition();
+    	double globalRot = this.getGlobalRotation();
+    	double globalScale = this.getGlobalScale();
+    	
+    	double parentScale = parent.getGlobalScale();
+    	double parentRot = parent.getGlobalRotation();
+    	double[] parentTrans = parent.getGlobalPosition();
+    	
+    	// Let's invert the parent global tranforms
+    	// So we can tranform or global transforms
+    	// to local transforms of the parent
+    	
+    	this.setRotation(globalRot - parentRot);
+    	this.setScale(globalScale/parentScale);
+
+    	double[][] rotInv = MathUtil.rotationMatrix(-parentRot);
+    	double[][] scaleInv = MathUtil.scaleMatrix(1/parentScale);
+    	double[] parentTransInv = new double[]{-parentTrans[0], -parentTrans[1]};
+    	double[][] transInv = MathUtil.translationMatrix(parentTransInv);
+    	
+    	// m Will be the inverse modelView matrix from the
+    	// parent
+    	double[][] m = MathUtil.multiply(scaleInv, rotInv);
+    	m = MathUtil.multiply(m, transInv);
+    	// Need to change notation of pos (add 1 to the final line)
+    	double[] tempGlobalPos = new double[]{globalPos[0],
+    										globalPos[1],
+    										1};
+    	double[] newPos = MathUtil.multiply(m, tempGlobalPos);
+    	this.setPosition(newPos[0], newPos[1]);
+    	
+    	
+    	
         
         myParent.myChildren.remove(this);
         myParent = parent;
