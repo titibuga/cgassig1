@@ -1,5 +1,6 @@
 package ass1;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
@@ -7,7 +8,7 @@ import javax.media.opengl.glu.GLU;
 /**
  * The camera is a GameObject that can be moved, rotated and scaled like any other.
  * 
- * TODO: You need to implment the setView() method.
+ * 
  *       The methods you need to complete are at the bottom of the class
  *
  * @author malcolmr
@@ -40,10 +41,23 @@ public class Camera extends GameObject {
    
     
     public void setView(GL2 gl) {
+    	
+    	float[] bg = this.getBackground();
+    	double scl = this.getGlobalScale();
+    	double rot = this.getGlobalRotation();
+    	double[] pos = this.getGlobalPosition();
         
-        // TODO 1. clear the view to the background colour
+        //  clear the view to the background colour
+    	gl.glClearColor(bg[0], bg[1], bg[2], bg[3]); // Background colour
+    	gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         
-        // TODO 2. set the view matrix to account for the camera's position         
+        //  set the view matrix to account for the camera's position  
+    	gl.glMatrixMode(GL2.GL_MODELVIEW);
+    	gl.glLoadIdentity();
+    	// apply the view transform
+    	gl.glScaled(1.0f/scl, 1.0f/scl, 1.0f);
+    	gl.glRotated(-rot, 0, 0, 1);
+    	gl.glTranslated(-pos[0], -pos[1], 0);
     }
 
     public void reshape(GL2 gl, int x, int y, int width, int height) {

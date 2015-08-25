@@ -1,5 +1,6 @@
 package ass1;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 /**
@@ -114,9 +115,33 @@ public class PolygonalGameObject extends GameObject {
      */
     @Override
     public void drawSelf(GL2 gl) {
-
-        // TODO: Write this method
-
+    	
+    	double[] points = this.getPoints();
+    	double[] colour;
+    	
+    	if((colour = this.getFillColour()) != null)
+    	{
+	    	gl.glColor4d(colour[0], colour[1], colour[2], colour[3]);
+	    	gl.glPolygonMode(
+	    	GL2.GL_FRONT_AND_BACK, GL2.GL_FILL); // For safety
+	    	gl.glBegin(GL2.GL_POLYGON);
+			for(int i = 0; i + 1 < this.myPoints.length; i+=2)
+				gl.glVertex2d(points[i], points[i+1]);					
+			gl.glEnd();
+    	}
+    	if((colour = this.getLineColour()) != null)
+    	{
+    		gl.glColor4d(colour[0], colour[1], colour[2], colour[3]);
+	    	gl.glPolygonMode(
+	    	GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+	    	gl.glBegin(GL2.GL_POLYGON);
+			for(int i = 0; i + 1 < this.myPoints.length; i+=2)
+				gl.glVertex2d(points[i], points[i+1]);					
+			gl.glEnd();
+    	}
+    	gl.glPolygonMode(
+    	    	GL2.GL_FRONT_AND_BACK, GL2.GL_FILL); // Back to default
+    
     }
 
 
