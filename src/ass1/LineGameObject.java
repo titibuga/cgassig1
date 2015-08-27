@@ -63,6 +63,7 @@ public class LineGameObject extends GameObject {
     	
     	if(colour != null)
     	{
+    		gl.glColor4d(colour[0], colour[1], colour[2], colour[3]);
 	    	gl.glBegin(GL2.GL_LINES);
 	    		gl.glVertex2d(p1[0], p1[1]);
 	    		gl.glVertex2d(p2[0], p2[1]);

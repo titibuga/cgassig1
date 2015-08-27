@@ -121,7 +121,7 @@ public class CircularGameObject extends GameObject{
 	    	{
 	    		gl.glColor4d(colour[0], colour[1], colour[2], colour[3]);
 		    	gl.glPolygonMode(
-		    	GL2.GL_FRONT_AND_BACK, GL2.GL_FILL); // For safety
+		    	GL2.GL_FRONT_AND_BACK, GL2.GL_LINE); // For safety
 		    	gl.glBegin(GL2.GL_POLYGON);
 		    	for (int i = 0; i < 32; i++) {
 	                  double angle = 2*Math.PI/32 * i;

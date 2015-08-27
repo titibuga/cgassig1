@@ -30,7 +30,7 @@ public class TestMyCoolGameObject {
 		cgo.translate(-0.2,0.2);
 		cgo.rotate(45);
 		cgo.scale(0.25);
-		 */
+		 */	
 	}
    
     /**

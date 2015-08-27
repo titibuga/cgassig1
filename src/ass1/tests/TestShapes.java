@@ -20,8 +20,9 @@ public class TestShapes {
 		
         // Create a polygon
         double white[] = {1,1,1,1};
+        double green[] = {1,0,0,1};
         double points[] = {0,0,1,1,0,1};
-        PolygonalGameObject p = new PolygonalGameObject(GameObject.ROOT,points,null,white);
+        PolygonalGameObject p = new PolygonalGameObject(GameObject.ROOT,points,white,green);
         p.rotate(45);
         
         // Create a circle 
