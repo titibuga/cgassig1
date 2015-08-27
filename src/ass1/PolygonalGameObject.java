@@ -118,22 +118,12 @@ public class PolygonalGameObject extends GameObject {
     	
     	double[] points = this.getPoints();
     	double[] colour;
-    	
-    	if((colour = this.getFillColour()) != null)
-    	{
-	    	gl.glColor4d(colour[0], colour[1], colour[2], colour[3]);
-	    	gl.glPolygonMode(
-	    	GL2.GL_FRONT_AND_BACK, GL2.GL_FILL); // For safety
-	    	gl.glBegin(GL2.GL_POLYGON);
-			for(int i = 0; i + 1 < this.myPoints.length; i+=2)
-				gl.glVertex2d(points[i], points[i+1]);					
-			gl.glEnd();
-    	}
     	if((colour = this.getLineColour()) != null)
     	{
+    		gl.glPolygonMode(
+    		    	GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
     		gl.glColor4d(colour[0], colour[1], colour[2], colour[3]);
-	    	gl.glPolygonMode(
-	    	GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+	    	
 	    	gl.glBegin(GL2.GL_POLYGON);
 			for(int i = 0; i + 1 < this.myPoints.length; i+=2)
 				gl.glVertex2d(points[i], points[i+1]);					
@@ -141,6 +131,19 @@ public class PolygonalGameObject extends GameObject {
     	}
     	gl.glPolygonMode(
     	    	GL2.GL_FRONT_AND_BACK, GL2.GL_FILL); // Back to default
+    	
+    	if((colour = this.getFillColour()) != null)
+    	{
+    		gl.glPolygonMode(
+    		    	GL2.GL_FRONT_AND_BACK, GL2.GL_FILL); // For safety
+	    	gl.glColor4d(colour[0], colour[1], colour[2], colour[3]);
+	    	
+	    	gl.glBegin(GL2.GL_POLYGON);
+			for(int i = 0; i + 1 < this.myPoints.length; i+=2)
+				gl.glVertex2d(points[i], points[i+1]);					
+			gl.glEnd();
+    	}
+    	
     
     }
 

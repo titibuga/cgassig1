@@ -1,7 +1,9 @@
 package ass1.tests;
 
+import javax.media.opengl.DebugGL2;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
+import javax.media.opengl.TraceGL2;
 import javax.media.opengl.awt.GLJPanel;
 import javax.swing.JFrame;
 
@@ -24,11 +26,11 @@ public class TestMyCoolGameObject {
 		// Should not break if we apply transformations for example
 		// If we uncommented these lines (or wrote other transformations) 
 		// it should not break your object
-		/**
+		/*
 		cgo.translate(-0.2,0.2);
 		cgo.rotate(45);
 		cgo.scale(0.25);
-		**/    
+		 */
 	}
    
     /**
@@ -40,9 +42,10 @@ public class TestMyCoolGameObject {
         // Initialise OpenGL
         GLProfile glprofile = GLProfile.getDefault();
         GLCapabilities glcapabilities = new GLCapabilities(glprofile);
-        
+        	
         // create a GLJPanel to draw on
         GLJPanel panel = new GLJPanel(glcapabilities);
+        
 
         // Create a camera
         Camera camera = new Camera(GameObject.ROOT);
