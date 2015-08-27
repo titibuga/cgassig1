@@ -6,18 +6,20 @@ public class MyCoolGameObject extends GameObject {
 
 	public MyCoolGameObject(GameObject parent) {
 		super(parent);
+		
+		double[] black = new double[]{0,0,0,0};
 		//Rocket's body as our child
 		PolygonalGameObject body = new PolygonalGameObject(this,
 						new double[]{0,0,2,0,2,5,0,5},
 						new double[]{0.5,0.5,0.5,0},
-						new double[]{0,0,0.9,0});
+						black);
 		//Triangles as children of body
 		
 		//Right triangle
 		PolygonalGameObject tr = new PolygonalGameObject(body,
 				new double[]{0,0,1,0,0,1},
 				new double[]{0.3,0.3,0.3,0},
-				new double[]{0,0,0,0});
+				black);
 		
 		tr.translate(2, 0);
 		
@@ -25,7 +27,7 @@ public class MyCoolGameObject extends GameObject {
 		 tr = new PolygonalGameObject(body,
 				new double[]{0,0,1,0,0,1},
 				new double[]{0.3,0.3,0.3,0},
-				new double[]{0.9,0,0,0});
+				black);
 		
 		tr.rotate(90);
 		
@@ -33,7 +35,7 @@ public class MyCoolGameObject extends GameObject {
 		tr = new PolygonalGameObject(body,
 				new double[]{0,0,2,0,1,2},
 				new double[]{0.9,0.1,0.1,0},
-				new double[]{0,0,0,0});
+				black);
 		
 		tr.translate(0, 5);
 		
